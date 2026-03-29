@@ -63,11 +63,46 @@ useEffect(() => {
     setZoomPos({ x: 0, y: 0 });
   };
 
-  const handleDownload = () => {
-    const link = document.createElement("a");
-    link.href = generated;
-    link.download = `interior-ai-${style}-${Date.now()}.jpg`;
-    link.click();
+ const handleDownload = () => {
+    const canvas = document.createElement("canvas");
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+
+      // Draw image
+      ctx.drawImage(img, 0, 0);
+
+      // Add watermark bar at bottom
+      const barHeight = 36;
+      ctx.fillStyle = "rgba(0, 0, 0, 0.55)";
+      ctx.fillRect(0, canvas.height - barHeight, canvas.width, barHeight);
+
+      // Style name text
+      ctx.fillStyle = "rgba(201, 168, 76, 0.9)";
+      ctx.font = "bold 13px sans-serif";
+      ctx.letterSpacing = "2px";
+      const styleName = style.replace(/_/g, " ").toUpperCase();
+      ctx.fillText(`InteriorAI — ${styleName}`, 14, canvas.height - 12);
+
+      // Date text on right
+      ctx.fillStyle = "rgba(255,255,255,0.4)";
+      ctx.font = "11px sans-serif";
+      const date = new Date().toLocaleDateString("en-US", {
+        month: "short", day: "numeric", year: "numeric"
+      });
+      const dateWidth = ctx.measureText(date).width;
+      ctx.fillText(date, canvas.width - dateWidth - 14, canvas.height - 12);
+
+      // Download
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/jpeg", 0.95);
+      link.download = `InteriorAI-${style}-${Date.now()}.jpg`;
+      link.click();
+    };
+    img.src = generated;
   };
 
   return (
