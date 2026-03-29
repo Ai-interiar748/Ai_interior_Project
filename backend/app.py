@@ -74,6 +74,7 @@ def generate():
         return jsonify({"error": "Colab not connected"}), 503
     data = request.json
     style = data.get("style")
+    palette = data.get("palette")
     if not style:
         return jsonify({"error": "No style provided"}), 400
     upload_path = os.path.join(UPLOAD_FOLDER, 'room_original.jpg')
@@ -83,7 +84,7 @@ def generate():
     try:
         response = requests.post(
             f"{COLAB_URL['url']}/colab-generate",
-            json={"image": image_b64, "style": style},
+            json={"image": image_b64, "style": style, "palette": palette},
             headers=COLAB_HEADERS,
             timeout=120
         )
@@ -123,7 +124,6 @@ def detect_objects():
         "objects": result.get("objects", [])
     })
 
-
 @app.route('/preview-styles', methods=['POST'])
 def preview_styles():
     if not COLAB_URL["url"]:
@@ -133,12 +133,14 @@ def preview_styles():
     if not os.path.exists(upload_path):
         return jsonify({"error": "No uploaded image found"}), 400
 
+    data = request.json or {}
+    palette = data.get("palette")
     image_b64 = image_to_base64(upload_path)
 
     try:
         response = requests.post(
             f"{COLAB_URL['url']}/colab-preview",
-            json={"image": image_b64},
+            json={"image": image_b64, "palette": palette},
             headers=COLAB_HEADERS,
             timeout=300
         )
@@ -151,22 +153,18 @@ def preview_styles():
         "previews": result.get("previews", {})
     })
 
+
 @app.route('/edit-object', methods=['POST'])
 def edit_object():
     if not COLAB_URL["url"]:
         return jsonify({"error": "Colab not connected"}), 503
-
     data = request.json
     object_label = data.get("object")
     edit_prompt = data.get("prompt")
-
     if not object_label or not edit_prompt:
         return jsonify({"error": "object and prompt required"}), 400
-
-    # Use edited image if exists, otherwise use styled image
     edited_path = os.path.join(OUTPUT_FOLDER, 'room_edited.jpg')
     styled_path = os.path.join(OUTPUT_FOLDER, 'room_styled.jpg')
-
     if os.path.exists(edited_path):
         image_b64 = image_to_base64(edited_path)
         print("Using previous edit as base")
@@ -175,7 +173,6 @@ def edit_object():
         print("Using styled image as base")
     else:
         return jsonify({"error": "No image found. Generate a style first."}), 400
-
     try:
         response = requests.post(
             f"{COLAB_URL['url']}/colab-edit",
@@ -190,19 +187,16 @@ def edit_object():
         result = response.json()
     except Exception as e:
         return jsonify({"error": f"Colab request failed: {str(e)}"}), 500
-
     if "image" not in result:
         return jsonify({"error": "Colab did not return an image", "details": result}), 500
-
-    # Save as room_edited.jpg for next edit
     output_path = os.path.join(OUTPUT_FOLDER, 'room_edited.jpg')
     base64_to_image(result["image"], output_path)
-
     return jsonify({
         "message": "Object edit complete",
         "object": object_label,
         "image": result["image"]
     })
+
 if __name__ == '__main__':
     print("🚀 AI Interior Designer v2 - Flask API")
     print("📍 Running at: http://localhost:5000")

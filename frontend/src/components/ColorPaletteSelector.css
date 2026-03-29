@@ -1,0 +1,274 @@
+.cps-wrapper {
+  width: 100%;
+  max-width: 900px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+/* Toggle Button */
+.cps-toggle {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 16px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.2s;
+}
+
+.cps-toggle:hover {
+  background: var(--surface2);
+}
+
+.cps-toggle.active {
+  border-bottom: 1px solid var(--gold);
+}
+
+.cps-toggle-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cps-icon {
+  color: var(--gold);
+  font-size: 18px;
+}
+
+.cps-toggle-label {
+  display: block;
+  font-size: 13px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  text-align: left;
+  font-weight: 500;
+}
+
+.cps-toggle-sub {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: left;
+  margin-top: 2px;
+}
+
+.cps-toggle-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cps-mini-palette {
+  display: flex;
+  gap: 4px;
+}
+
+.cps-mini-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  display: inline-block;
+}
+
+.cps-chevron {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* Panel */
+.cps-panel {
+  overflow: hidden;
+}
+
+.cps-panel-inner {
+  padding: 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Tabs */
+.cps-tabs {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.cps-tab {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.04em;
+}
+
+.cps-tab.active {
+  background: var(--gold);
+  color: var(--bg);
+  border-color: var(--gold);
+}
+
+.cps-tab:not(.active):hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.cps-clear {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.cps-clear:hover {
+  color: var(--error);
+}
+
+/* Preset Grid */
+.cps-presets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.cps-preset-item {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  background: var(--surface2);
+}
+
+.cps-preset-item:hover {
+  border-color: rgba(201, 168, 76, 0.4);
+}
+
+.cps-preset-item.selected {
+  border-color: var(--gold);
+  background: rgba(201, 168, 76, 0.06);
+}
+
+.cps-preset-colors {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+  height: 28px;
+}
+
+.cps-preset-color {
+  flex: 1;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.cps-preset-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cps-preset-name {
+  font-size: 12px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.cps-preset-desc {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.cps-selected-check {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--gold);
+  color: var(--bg);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* Custom Colors */
+.cps-custom {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cps-custom-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.cps-custom-colors {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cps-custom-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.cps-custom-swatch {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.cps-custom-swatch:hover {
+  border-color: var(--gold);
+}
+
+.cps-color-input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.cps-custom-hex {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: monospace;
+  letter-spacing: 0.05em;
+}
+
+.cps-custom-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-style: italic;
+}

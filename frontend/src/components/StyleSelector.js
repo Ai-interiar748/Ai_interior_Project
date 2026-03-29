@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ColorPaletteSelector from "./ColorPaletteSelector";
 import "./StyleSelector.css";
 
 const STYLES = [
@@ -19,8 +20,9 @@ export default function StyleSelector({ uploadedImage, onGenerate }) {
   const [loadingPreviews, setLoadingPreviews] = useState(false);
   const [previewDone, setPreviewDone] = useState(false);
   const [modalStyle, setModalStyle] = useState(null);
+  const [selectedPalette, setSelectedPalette] = useState(null);
 
-  const handlePreviewAll = async () => {
+const handlePreviewAll = async () => {
     setLoadingPreviews(true);
     setPreviews({});
     setPreviewDone(false);
@@ -28,7 +30,7 @@ export default function StyleSelector({ uploadedImage, onGenerate }) {
       const res = await fetch("http://localhost:5000/preview-styles", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({}),
+        body: JSON.stringify({ palette: selectedPalette }),
       });
       const data = await res.json();
       if (data.previews) {
@@ -61,6 +63,9 @@ export default function StyleSelector({ uploadedImage, onGenerate }) {
           <div className="strip-label">Your room</div>
         </div>
       )}
+
+      {/* Color Palette Selector */}
+      <ColorPaletteSelector onPaletteChange={setSelectedPalette} />
 
       {/* Preview All Button */}
       {!previewDone && (
@@ -228,6 +233,16 @@ export default function StyleSelector({ uploadedImage, onGenerate }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: selected ? 1 : 0.4 }}
       >
+        {selectedPalette && (
+          <div className="selected-palette-info">
+            <div className="selected-palette-colors">
+              {selectedPalette.colors.map((c, i) => (
+                <span key={i} style={{ background: c }} className="selected-palette-dot" />
+              ))}
+            </div>
+            <span className="selected-palette-name">{selectedPalette.name} applied</span>
+          </div>
+        )}
         <button
           className="generate-btn"
           disabled={!selected}
@@ -236,7 +251,7 @@ export default function StyleSelector({ uploadedImage, onGenerate }) {
               const previewImg = previews[selected]
                 ? `data:image/jpeg;base64,${previews[selected]}`
                 : null;
-              onGenerate(selected, previewImg);
+              onGenerate(selected, previewImg, selectedPalette);
             }
           }}
         >
@@ -246,6 +261,7 @@ export default function StyleSelector({ uploadedImage, onGenerate }) {
         {selected && (
           <p className="generate-hint">
             Generating <strong>{STYLES.find(s => s.id === selected)?.name}</strong> at 768x768 resolution
+            {selectedPalette && <> with <strong>{selectedPalette.name}</strong> palette</>}
           </p>
         )}
       </motion.div>

@@ -41,12 +41,11 @@ export default function App() {
     setStep("style");
   };
 
-  const handleGenerate = async (style, previewImage = null) => {
+  const handleGenerate = async (style, previewImage = null, palette = null) => {
     setSelectedStyle(style);
     setLoading(true);
     setLoadingMsg("Analyzing room structure...");
 
-    // Show preview image immediately while generating
     if (previewImage) {
       setGeneratedImage(previewImage);
       setStep("result");
@@ -57,14 +56,13 @@ export default function App() {
       const res = await fetch("http://localhost:5000/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ style }),
+        body: JSON.stringify({ style, palette }),
       });
       const data = await res.json();
 
       if (data.image) {
         setGeneratedImage("data:image/jpeg;base64," + data.image);
 
-        // Add to history
         setHistory(prev => [{
           id: Date.now(),
           image: "data:image/jpeg;base64," + data.image,
@@ -189,7 +187,6 @@ export default function App() {
                   onClick={() => setShowHistory(false)}
                 >✕</button>
               </div>
-
               <div className="history-list">
                 {history.map((item) => (
                   <motion.div
@@ -217,7 +214,6 @@ export default function App() {
                   </motion.div>
                 ))}
               </div>
-
               {history.length > 0 && (
                 <div className="history-footer">
                   <button
