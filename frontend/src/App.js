@@ -9,6 +9,7 @@ import StyleSelector from "./components/StyleSelector";
 import ResultView from "./components/ResultView";
 import ObjectEditor from "./components/ObjectEditor";
 import Auth from "./components/Auth";
+import BackendSetup from "./components/BackendSetup";
 import { ToastProvider, useToast } from "./components/Toast";
 import { API_URL } from "./config";
 import "./App.css";
@@ -42,6 +43,10 @@ function AppInner() {
   const [previousImage, setPreviousImage] = useState(null);
   const [connectionStatus, setConnectionStatus] = useState("checking");
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [showBackendSetup, setShowBackendSetup] = useState(false);
+  const [apiUrl, setApiUrl] = useState(
+    () => localStorage.getItem("interiorai_api_url") || API_URL
+  );
 
   const downloadRef = useRef(null);
   const generatedImageRef = useRef(null);
@@ -88,20 +93,23 @@ function AppInner() {
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        const res = await fetch("${API_URL}/health", {
+        const res = await fetch(`${apiUrl}/health`, {
           signal: AbortSignal.timeout(5000),
         });
         const data = await res.json();
         setConnectionStatus(data.colab_connected ? "full" : "partial");
+        setShowBackendSetup(false);
       } catch {
         setConnectionStatus("offline");
+        setShowBackendSetup(true);
       }
     };
 
     checkHealth();
     const interval = setInterval(checkHealth, 30000);
     return () => clearInterval(interval);
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apiUrl]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -178,7 +186,7 @@ function AppInner() {
 
       setLoadingStep(3); setLoadingProgress(30);
 
-      const res = await fetch("${API_URL}/generate", {
+      const res = await fetch(`${apiUrl}/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ style, palette, customPrompt }),
@@ -204,7 +212,7 @@ function AppInner() {
         setLoadingStep(6); setLoadingProgress(90);
         if (!previewImage) setStep("result");
 
-        const detectRes = await fetch("${API_URL}/detect-objects", {
+        const detectRes = await fetch(`${apiUrl}/detect-objects`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({}),
@@ -241,7 +249,7 @@ function AppInner() {
 
       setLoadingStep(2); setLoadingProgress(35);
 
-      const res = await fetch("${API_URL}/edit-object", {
+      const res = await fetch(`${apiUrl}/edit-object`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ object, prompt }),
@@ -301,16 +309,30 @@ function AppInner() {
     setPreviousImage(null);
   };
 
+  const handleBackendConnect = (url, healthData) => {
+    setApiUrl(url);
+    if (healthData) {
+      setConnectionStatus(healthData.colab_connected ? "full" : "partial");
+    }
+    setShowBackendSetup(false);
+    toast(`Connected to ${url}`, "success", 3000);
+  };
+
   const connLabel = { checking: "Checking", full: "Live", partial: "Partial", offline: "Offline" };
   const connTip = {
     checking: "Checking connection...",
     full: "Flask + Colab connected",
     partial: "Flask running — Colab not connected",
-    offline: "Backend offline — start Flask first",
+    offline: "Click to configure backend URL",
   };
 
   return (
     <div className="app">
+      {/* Backend setup modal */}
+      {showBackendSetup && (
+        <BackendSetup onConnect={handleBackendConnect} />
+      )}
+
       {/* Ambient background orbs */}
       <div className="ambient-bg" aria-hidden="true">
         <div className="orb orb-1" />
@@ -342,6 +364,8 @@ function AppInner() {
             <div
               className={`conn-status conn-${connectionStatus}`}
               title={connTip[connectionStatus]}
+              onClick={() => setShowBackendSetup(true)}
+              style={{ cursor: "pointer" }}
             >
               <span className="conn-dot" />
               <span className="conn-label">{connLabel[connectionStatus]}</span>

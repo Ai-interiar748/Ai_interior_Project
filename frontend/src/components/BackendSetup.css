@@ -1,0 +1,234 @@
+.bsetup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(8, 8, 16, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.bsetup-modal {
+  background: linear-gradient(145deg, #13131f, #1a1a2e);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  border-radius: 20px;
+  padding: 40px 36px 32px;
+  width: 100%;
+  max-width: 460px;
+  box-shadow:
+    0 0 0 1px rgba(201, 168, 76, 0.08),
+    0 24px 64px rgba(0, 0, 0, 0.6),
+    0 0 80px rgba(201, 168, 76, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.bsetup-icon {
+  font-size: 2.4rem;
+  color: #c9a84c;
+  margin-bottom: 12px;
+  text-shadow: 0 0 24px rgba(201, 168, 76, 0.5);
+}
+
+.bsetup-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f0e8d8;
+  margin: 0 0 10px;
+  letter-spacing: -0.02em;
+}
+
+.bsetup-desc {
+  font-size: 0.875rem;
+  color: #888;
+  text-align: center;
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+
+.bsetup-desc code {
+  background: rgba(201, 168, 76, 0.12);
+  color: #c9a84c;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.82rem;
+}
+
+.bsetup-input-wrap {
+  width: 100%;
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.bsetup-input {
+  width: 100%;
+  padding: 12px 44px 12px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: #f0e8d8;
+  font-size: 0.95rem;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.bsetup-input:focus {
+  border-color: rgba(201, 168, 76, 0.5);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+}
+
+.bsetup-input-error {
+  border-color: rgba(255, 80, 80, 0.5) !important;
+  box-shadow: 0 0 0 3px rgba(255, 80, 80, 0.1) !important;
+}
+
+.bsetup-input-ok {
+  border-color: rgba(72, 199, 142, 0.5) !important;
+  box-shadow: 0 0 0 3px rgba(72, 199, 142, 0.1) !important;
+}
+
+.bsetup-check {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #48c78e;
+  font-size: 1.1rem;
+}
+
+.bsetup-error {
+  width: 100%;
+  font-size: 0.8rem;
+  color: #ff6b6b;
+  margin: 0 0 8px;
+  text-align: left;
+}
+
+.bsetup-hints {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.bsetup-hint-btn {
+  flex: 1;
+  padding: 6px 0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: #666;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.bsetup-hint-btn:hover {
+  background: rgba(201, 168, 76, 0.08);
+  border-color: rgba(201, 168, 76, 0.2);
+  color: #c9a84c;
+}
+
+.bsetup-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.bsetup-btn-connect {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #c9a84c, #a67c30);
+  border: none;
+  border-radius: 10px;
+  color: #0a0a0f;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+}
+
+.bsetup-btn-connect:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(201, 168, 76, 0.35);
+}
+
+.bsetup-btn-connect:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.bsetup-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(10, 10, 15, 0.3);
+  border-top-color: #0a0a0f;
+  border-radius: 50%;
+  animation: bsetup-spin 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes bsetup-spin {
+  to { transform: rotate(360deg); }
+}
+
+.bsetup-btn-skip {
+  width: 100%;
+  padding: 11px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  color: #555;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.bsetup-btn-skip:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #888;
+}
+
+.bsetup-footer {
+  margin-top: 20px;
+  font-size: 0.75rem;
+  color: #444;
+  text-align: center;
+}
+
+.bsetup-footer strong {
+  color: #666;
+}
+
+/* ── Mobile ─────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .bsetup-modal {
+    padding: 32px 20px 24px;
+    border-radius: 16px;
+  }
+
+  .bsetup-title {
+    font-size: 1.3rem;
+  }
+
+  .bsetup-desc {
+    font-size: 0.82rem;
+  }
+
+  .bsetup-input {
+    font-size: 0.85rem;
+  }
+}
