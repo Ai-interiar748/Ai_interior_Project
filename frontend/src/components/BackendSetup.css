@@ -2,9 +2,9 @@
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: rgba(8, 8, 16, 0.88);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(8, 8, 16, 0.9);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,51 +13,133 @@
 
 .bsetup-modal {
   background: linear-gradient(145deg, #13131f, #1a1a2e);
-  border: 1px solid rgba(201, 168, 76, 0.25);
+  border: 1px solid rgba(201, 168, 76, 0.22);
   border-radius: 20px;
-  padding: 40px 36px 32px;
+  padding: 36px 32px 28px;
   width: 100%;
   max-width: 460px;
   box-shadow:
-    0 0 0 1px rgba(201, 168, 76, 0.08),
-    0 24px 64px rgba(0, 0, 0, 0.6),
-    0 0 80px rgba(201, 168, 76, 0.06);
+    0 0 0 1px rgba(201, 168, 76, 0.07),
+    0 24px 64px rgba(0, 0, 0, 0.65),
+    0 0 80px rgba(201, 168, 76, 0.05);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0;
 }
 
 .bsetup-icon {
-  font-size: 2.4rem;
+  font-size: 2.2rem;
   color: #c9a84c;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   text-shadow: 0 0 24px rgba(201, 168, 76, 0.5);
 }
 
 .bsetup-title {
-  font-size: 1.5rem;
+  font-size: 1.45rem;
   font-weight: 700;
   color: #f0e8d8;
-  margin: 0 0 10px;
+  margin: 0 0 20px;
   letter-spacing: -0.02em;
 }
 
-.bsetup-desc {
-  font-size: 0.875rem;
-  color: #888;
-  text-align: center;
-  line-height: 1.6;
-  margin: 0 0 24px;
+/* ── Mode toggle ─────────────────────────────────────────── */
+
+.bsetup-modes {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 16px;
 }
 
-.bsetup-desc code {
-  background: rgba(201, 168, 76, 0.12);
-  color: #c9a84c;
-  padding: 1px 6px;
-  border-radius: 4px;
-  font-size: 0.82rem;
+.bsetup-mode-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.18s;
+  color: #555;
 }
+
+.bsetup-mode-btn:hover {
+  background: rgba(201, 168, 76, 0.06);
+  border-color: rgba(201, 168, 76, 0.18);
+  color: #888;
+}
+
+.bsetup-mode-btn.active {
+  background: rgba(201, 168, 76, 0.1);
+  border-color: rgba(201, 168, 76, 0.45);
+  color: #c9a84c;
+}
+
+.bsetup-mode-icon {
+  font-size: 1.3rem;
+}
+
+.bsetup-mode-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* ── Description ─────────────────────────────────────────── */
+
+.bsetup-desc {
+  font-size: 0.84rem;
+  color: #666;
+  text-align: center;
+  margin: 0 0 14px;
+}
+
+/* ── Colab steps ─────────────────────────────────────────── */
+
+.bsetup-steps {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.bsetup-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: #888;
+  line-height: 1.4;
+}
+
+.bsetup-step strong {
+  color: #c9a84c;
+}
+
+.bsetup-step-n {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  background: rgba(201, 168, 76, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #c9a84c;
+}
+
+/* ── URL input ───────────────────────────────────────────── */
 
 .bsetup-input-wrap {
   width: 100%;
@@ -67,12 +149,12 @@
 
 .bsetup-input {
   width: 100%;
-  padding: 12px 44px 12px 16px;
+  padding: 12px 44px 12px 14px;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   color: #f0e8d8;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-family: 'SF Mono', 'Fira Code', monospace;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -82,6 +164,11 @@
 .bsetup-input:focus {
   border-color: rgba(201, 168, 76, 0.5);
   box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+}
+
+.bsetup-input::placeholder {
+  color: #444;
+  font-style: italic;
 }
 
 .bsetup-input-error {
@@ -105,42 +192,21 @@
 
 .bsetup-error {
   width: 100%;
-  font-size: 0.8rem;
+  font-size: 0.79rem;
   color: #ff6b6b;
-  margin: 0 0 8px;
+  margin: 0 0 10px;
   text-align: left;
+  line-height: 1.5;
 }
 
-.bsetup-hints {
-  display: flex;
-  gap: 8px;
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.bsetup-hint-btn {
-  flex: 1;
-  padding: 6px 0;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
-  color: #666;
-  font-size: 0.78rem;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.bsetup-hint-btn:hover {
-  background: rgba(201, 168, 76, 0.08);
-  border-color: rgba(201, 168, 76, 0.2);
-  color: #c9a84c;
-}
+/* ── Actions ─────────────────────────────────────────────── */
 
 .bsetup-actions {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
+  margin-top: 4px;
 }
 
 .bsetup-btn-connect {
@@ -167,18 +233,20 @@
 }
 
 .bsetup-btn-connect:disabled {
-  opacity: 0.7;
+  opacity: 0.75;
   cursor: default;
+  transform: none;
 }
 
 .bsetup-spinner {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border: 2px solid rgba(10, 10, 15, 0.3);
   border-top-color: #0a0a0f;
   border-radius: 50%;
   animation: bsetup-spin 0.7s linear infinite;
   display: inline-block;
+  flex-shrink: 0;
 }
 
 @keyframes bsetup-spin {
@@ -187,48 +255,33 @@
 
 .bsetup-btn-skip {
   width: 100%;
-  padding: 11px;
+  padding: 10px;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 10px;
-  color: #555;
-  font-size: 0.85rem;
+  color: #444;
+  font-size: 0.82rem;
   cursor: pointer;
   transition: all 0.15s;
 }
 
 .bsetup-btn-skip:hover {
-  border-color: rgba(255, 255, 255, 0.15);
-  color: #888;
-}
-
-.bsetup-footer {
-  margin-top: 20px;
-  font-size: 0.75rem;
-  color: #444;
-  text-align: center;
-}
-
-.bsetup-footer strong {
+  border-color: rgba(255, 255, 255, 0.13);
   color: #666;
 }
 
-/* ── Mobile ─────────────────────────────────────────── */
+/* ── Mobile ──────────────────────────────────────────────── */
 @media (max-width: 480px) {
   .bsetup-modal {
-    padding: 32px 20px 24px;
+    padding: 28px 18px 22px;
     border-radius: 16px;
   }
 
   .bsetup-title {
-    font-size: 1.3rem;
-  }
-
-  .bsetup-desc {
-    font-size: 0.82rem;
+    font-size: 1.25rem;
   }
 
   .bsetup-input {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
   }
 }
