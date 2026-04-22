@@ -45,15 +45,9 @@ export default function BackendSetup({ onConnect }) {
       setErrorMsg("Please enter a URL first.");
       return;
     }
-    // Catch common mistake: ngrok URL without the .app suffix
-    if (clean.includes("ngrok-free") && !clean.includes(".app")) {
-      setStatus("error");
-      setErrorMsg('URL looks incomplete — ngrok URLs end in ".app", e.g. https://xxxx.ngrok-free.app');
-      return;
-    }
     if (!clean.startsWith("http")) {
       setStatus("error");
-      setErrorMsg('URL must start with http:// or https://');
+      setErrorMsg("URL must start with http:// or https://");
       return;
     }
     setStatus("testing");

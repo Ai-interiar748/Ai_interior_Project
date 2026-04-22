@@ -44,10 +44,12 @@ function AppInner() {
   const [previousImage, setPreviousImage] = useState(null);
   const [connectionStatus, setConnectionStatus] = useState("checking");
   const [showShortcuts, setShowShortcuts] = useState(false);
-  // On Vercel (non-localhost) with no saved URL, don't default to localhost
   const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
   const savedUrl = localStorage.getItem("interiorai_api_url");
-  const initialUrl = savedUrl || (isLocalhost ? API_URL : "");
+  // On Vercel, never use a localhost URL — it was saved from a local session
+  const isUsable = savedUrl && (isLocalhost || (!savedUrl.includes("localhost") && !savedUrl.includes("127.0.0.1")));
+  if (savedUrl && !isUsable) localStorage.removeItem("interiorai_api_url");
+  const initialUrl = isUsable ? savedUrl : (isLocalhost ? API_URL : "");
 
   const [showBackendSetup, setShowBackendSetup] = useState(!initialUrl);
   const [apiUrl, setApiUrl] = useState(initialUrl);
