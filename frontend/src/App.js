@@ -128,7 +128,10 @@ function AppInner() {
           headers: apiHeaders(),
         });
         const data = await res.json();
-        setConnectionStatus(data.colab_connected ? "full" : "partial");
+        // Accept both new format {colab_connected:true} and old Colab format {status:"Colab is running"}
+        const isFull = data.colab_connected === true ||
+                       (typeof data.status === "string" && data.status.toLowerCase().includes("colab"));
+        setConnectionStatus(isFull ? "full" : "partial");
         setShowBackendSetup(false);
       } catch {
         setConnectionStatus("offline");
