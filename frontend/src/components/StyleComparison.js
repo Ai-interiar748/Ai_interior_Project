@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getApiUrl, apiHeaders } from "../config";
+import { useToast } from "./Toast";
 import "./StyleComparison.css";
 
 const STYLES = [
@@ -15,6 +16,7 @@ const STYLES = [
 ];
 
 export default function StyleComparison({ original, currentImage, currentStyle }) {
+  const toast = useToast();
   const [open, setOpen] = useState(false);
   const [secondStyle, setSecondStyle] = useState(null);
   const [secondImage, setSecondImage] = useState(null);
@@ -37,15 +39,24 @@ export default function StyleComparison({ original, currentImage, currentStyle }
       });
 
       setProgress(80);
+
+      const contentType = res.headers.get("content-type") || "";
+      if (!res.ok || !contentType.includes("application/json")) {
+        toast("Generation failed on Colab — make sure all model cells ran successfully.", "error", 6000);
+        return;
+      }
+
       const data = await res.json();
 
       if (data.image) {
         setProgress(100);
         await new Promise(r => setTimeout(r, 300));
         setSecondImage("data:image/jpeg;base64," + data.image);
+      } else {
+        toast(data.error || "Generation failed — try again.", "error", 5000);
       }
     } catch (err) {
-      alert("Generation failed: " + err.message);
+      toast("Generation failed — Colab may be busy or models still loading.", "error", 6000);
     } finally {
       setLoading(false);
       setProgress(0);

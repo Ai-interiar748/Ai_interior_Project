@@ -228,6 +228,12 @@ function AppInner() {
 
       setLoadingStep(4); setLoadingProgress(60);
 
+      const genContentType = res.headers.get("content-type") || "";
+      if (!res.ok || !genContentType.includes("application/json")) {
+        toast("Generation failed on Colab — make sure all model cells ran successfully.", "error", 6000);
+        return;
+      }
+
       const data = await res.json();
 
       if (data.image) {
@@ -246,13 +252,20 @@ function AppInner() {
         setLoadingStep(6); setLoadingProgress(90);
         if (!previewImage) setStep("result");
 
-        const detectRes = await fetch(`${apiUrl}/detect-objects`, {
-          method: "POST",
-          headers: apiHeaders({ "Content-Type": "application/json" }),
-          body: JSON.stringify({}),
-        });
-        const detectData = await detectRes.json();
-        setDetectedObjects(detectData.objects || []);
+        try {
+          const detectRes = await fetch(`${apiUrl}/detect-objects`, {
+            method: "POST",
+            headers: apiHeaders({ "Content-Type": "application/json" }),
+            body: JSON.stringify({}),
+          });
+          const detectContentType = detectRes.headers.get("content-type") || "";
+          if (detectRes.ok && detectContentType.includes("application/json")) {
+            const detectData = await detectRes.json();
+            setDetectedObjects(detectData.objects || []);
+          }
+        } catch {
+          // object detection is best-effort, don't block the result
+        }
 
         setLoadingStep(7); setLoadingProgress(100);
         await new Promise(r => setTimeout(r, 400));
@@ -290,6 +303,13 @@ function AppInner() {
       });
 
       setLoadingStep(3); setLoadingProgress(70);
+
+      const editContentType = res.headers.get("content-type") || "";
+      if (!res.ok || !editContentType.includes("application/json")) {
+        toast("Edit failed on Colab — make sure all model cells ran successfully.", "error", 6000);
+        return;
+      }
+
       const data = await res.json();
 
       if (data.image) {
