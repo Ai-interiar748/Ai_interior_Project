@@ -91,13 +91,14 @@ export default function FurnishRoom({ uploadedImage, onGenerate }) {
 
 const buildPrompt = () => {
     const room = ROOM_TYPES.find(r => r.id === roomType)?.name || "room";
-    const style = STYLE_PREFERENCES.find(s => s.id === stylePreference)?.name || "Modern";
+    const style = STYLE_PREFERENCES.find(s => s.id === stylePreference);
+    const styleAdj = style ? style.name.toLowerCase() + " style " : "";
     const items = selectedItems.join(", ");
 
     return (
-        `${style} ${room} with ${items}, ` +
-        `bright natural daylight, warm lighting, ` +
-        `high quality materials, realistic shadows`
+        `${styleAdj}${items}, placed naturally inside this ${room.toLowerCase()}, ` +
+        `professionally arranged, bright natural daylight, warm ambient lighting, ` +
+        `photorealistic interior photography, 8k, sharp focus`
     );
 };
 
